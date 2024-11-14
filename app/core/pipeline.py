@@ -4,11 +4,13 @@ from langchain_core.runnables import RunnablePassthrough
 
 from .config import config
 from .ingest_data import create_retriever_from_pdf
+from .logger import logger
 
 system_prompt = "You are a helpful assitant responsible for answering user queries based on the context provided."
 user_prompt = """Use the following pieces of information to answer the user's question.
 Answers should be short and to the point.
-If you don't know the answer, just say that you don't know, don't try to make up an answer.
+If the question is present in the context word for word, provide the answer from word for word.
+If you don't know the answer, just say "Data Not Available", don't try to make up an answer.
 
 Context: {context}
 
@@ -34,30 +36,5 @@ def create_qa_chain(pdf_path):
         | config.llm
         | StrOutputParser()
     )
+    logger.info("QA chain created")
     return chain
-
-
-def main(pdf_path):
-    chain = create_qa_chain(pdf_path)
-
-    print("`q` to quit")
-    while True:
-        question = input("Ask a question: ")
-        if question == "q":
-            break
-        answer = chain.invoke(question)
-        print(answer)
-
-
-if __name__ == "__main__":
-    from argparse import ArgumentParser
-
-    argument_parser = ArgumentParser()
-    argument_parser.add_argument("-p", "--pdf", type=str, help="PDF path")
-    args = argument_parser.parse_args()
-
-    if not args.pdf:
-        print("No PDF path provided, using sample PDF")
-        args.pdf = "data/handbook.pdf"
-
-    main(args.pdf)

@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "langchain>=0.3.7",
-    "langchain-chroma>=0.1.4",
     "langchain-openai>=0.2.8",
     "langchain-text-splitters>=0.3.2",
     "openai>=1.54.4",
@@ -15,6 +14,7 @@ dependencies = [
     "rank-bm25>=0.2.2",
     "langchain-community>=0.3.7",
     "faiss-cpu>=1.9.0",
+    "streamlit>=1.40.1",
 ]
 
 [dependency-groups]
